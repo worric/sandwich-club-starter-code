@@ -11,6 +11,9 @@ import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
+import java.util.List;
+import java.util.ListIterator;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -18,6 +21,8 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
+    private static final String NEW_LINE = "\n";
+    private static final String NOT_AVAILABLE = "N/A";
 
     @BindView(R.id.description_tv)
     TextView mDiscription;
@@ -71,6 +76,26 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUI(Sandwich actualSandwich) {
-        
+        mDiscription.setText(actualSandwich.getDescription());
+        mOrigin.setText(actualSandwich.getPlaceOfOrigin());
+        appendListOfStringsToTextView(actualSandwich.getIngredients(), mIngredients);
+        appendListOfStringsToTextView(actualSandwich.getAlsoKnownAs(), mAlsoKnownAs);
+    }
+
+    private void appendListOfStringsToTextView(List<String> ingredients, TextView textView) {
+        if (ingredients == null) {
+            textView.setText(NOT_AVAILABLE);
+            return;
+        }
+
+        ListIterator<String> it = ingredients.listIterator();
+
+        while (it.hasNext()) {
+            String entry = it.next();
+
+            entry = entry + (it.hasNext() ? NEW_LINE : "");
+
+            textView.append(entry);
+        }
     }
 }

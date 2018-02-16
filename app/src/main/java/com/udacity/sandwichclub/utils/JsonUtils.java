@@ -30,7 +30,7 @@ public class JsonUtils {
         String placeOfOrigin = getStringFromJson(baseJsonObject, "placeOfOrigin");
         String description = getStringFromJson(baseJsonObject, "description");
         String image = getStringFromJson(baseJsonObject, "image");
-        List<String> ingregientsList = getListOfStringsFromJsonArray(baseJsonObject, "ingredients");
+        List<String> ingredientsList = getListOfStringsFromJsonArray(baseJsonObject, "ingredients");
 
         return new Sandwich(
                 mainName,
@@ -38,7 +38,7 @@ public class JsonUtils {
                 placeOfOrigin,
                 description,
                 image,
-                ingregientsList
+                ingredientsList
         );
     }
 
