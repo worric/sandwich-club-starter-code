@@ -8,6 +8,7 @@
     <string name="detail_ingredients_label">Ingredients:</string>
 
     <string name="not_available">N/A</string>
+    <string name="new_line">\n</string>
 
     <!-- Content descriptions-->
     <string name="sandwich_picture_content_description">Sandwich picture</string>

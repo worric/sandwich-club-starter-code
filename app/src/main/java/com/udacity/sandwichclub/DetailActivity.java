@@ -22,8 +22,6 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
-    private static final String NEW_LINE = "\n";
-    private static final String NOT_AVAILABLE = "N/A";
 
     @BindView(R.id.description_tv)
     TextView mDiscription;
@@ -102,7 +100,7 @@ public class DetailActivity extends AppCompatActivity {
         while (it.hasNext()) {
             String entry = it.next();
 
-            entry = entry + (it.hasNext() ? NEW_LINE : "");
+            entry = entry + (it.hasNext() ? getString(R.string.new_line) : "");
 
             textView.append(entry);
         }
