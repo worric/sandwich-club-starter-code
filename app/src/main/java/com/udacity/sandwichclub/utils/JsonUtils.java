@@ -16,52 +16,62 @@ public class JsonUtils {
     private static final String TAG = JsonUtils.class.getSimpleName();
 
     public static Sandwich parseSandwichJson(String json) {
-
-        Sandwich resultSandwich = null;
+        JSONObject baseJsonObject;
 
         try {
-            JSONObject baseObject = new JSONObject(json);
-
-            String mainName = baseObject.getString("mainName");
-
-            JSONArray alsoKnownAsArray = baseObject.getJSONArray("alsoKnownAs");
-            List<String> alsoKnownAsList = null;
-            if (alsoKnownAsArray.length() > 0) {
-                alsoKnownAsList = new ArrayList<>();
-                for (int i = 0; i < alsoKnownAsArray.length(); i++) {
-                    String alsoKnownAsEntry = alsoKnownAsArray.getString(i);
-                    alsoKnownAsList.add(alsoKnownAsEntry);
-                }
-            }
-
-            String placeOfOrigin = baseObject.getString("placeOfOrigin");
-
-            String description = baseObject.getString("description");
-
-            String image = baseObject.getString("image");
-
-            JSONArray ingredientsArray = baseObject.getJSONArray("ingredients");
-            List<String> ingregientsList = null;
-            if (ingredientsArray.length() > 0) {
-                ingregientsList = new ArrayList<>();
-                for (int i = 0; i < ingredientsArray.length(); i++) {
-                    String ingredientsEntry = ingredientsArray.getString(i);
-                    ingregientsList.add(ingredientsEntry);
-                }
-            }
-
-            resultSandwich = new Sandwich(
-                    mainName,
-                    alsoKnownAsList,
-                    placeOfOrigin,
-                    description,
-                    image,
-                    ingregientsList
-            );
+            baseJsonObject = new JSONObject(json);
         } catch (JSONException e) {
-            Log.e(TAG, "parseSandwichJson: Error in JSON parsing", e);
+            Log.e(TAG, "parseSandwichJson: There was a problem parsing the JSON string.", e);
+            return null;
         }
 
-        return resultSandwich;
+        String mainName = getStringFromJson(baseJsonObject, "mainName");
+        List<String> alsoKnownAsList = getListOfStringsFromJsonArray(baseJsonObject, "alsoKnownAs");
+        String placeOfOrigin = getStringFromJson(baseJsonObject, "placeOfOrigin");
+        String description = getStringFromJson(baseJsonObject, "description");
+        String image = getStringFromJson(baseJsonObject, "image");
+        List<String> ingregientsList = getListOfStringsFromJsonArray(baseJsonObject, "ingredients");
+
+        return new Sandwich(
+                mainName,
+                alsoKnownAsList,
+                placeOfOrigin,
+                description,
+                image,
+                ingregientsList
+        );
+    }
+
+    private static List<String> getListOfStringsFromJsonArray(JSONObject jsonObject, String key) {
+        List<String> resultList = null;
+
+        try {
+            JSONArray jsonArray = jsonObject.getJSONArray(key);
+
+            if (jsonArray != null && jsonArray.length() > 0) {
+                resultList = new ArrayList<>();
+
+                for (int i = 0; i < jsonObject.length(); i++) {
+                    String alsoKnownAsEntry = jsonArray.getString(i);
+                    resultList.add(alsoKnownAsEntry);
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "getListOfStringsFromJsonArray: JSONArray with key: " + key + " cannot be processed.", e);
+        }
+
+        return resultList;
+    }
+
+    private static String getStringFromJson(JSONObject jsonObject, String key) {
+        String resultString = null;
+
+        try {
+            resultString = jsonObject.getString(key);
+        } catch (JSONException e) {
+            Log.e(TAG, "getStringFromJson: String with key: " + key + " cannot be extracted.", e);
+        }
+
+        return resultString;
     }
 }
